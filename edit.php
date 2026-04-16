@@ -1,6 +1,5 @@
 <?php
 include_once 'db.php';
-include_once 'Visita.php';
 
 $visita = new Visita((new Database())->getConnection());
 if(empty($_GET['id'])) die(header("Location: index.php"));

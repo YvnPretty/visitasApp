@@ -1,7 +1,6 @@
 <?php
 session_start();
 include_once 'db.php';
-include_once 'Visita.php';
 
 $busqueda = $_GET['buscar'] ?? "";
 $stmt = (new Visita((new Database())->getConnection()))->obtenerTodas($busqueda);
@@ -43,7 +42,7 @@ $stmt = (new Visita((new Database())->getConnection()))->obtenerTodas($busqueda)
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="mb-0 text-secondary">Registro</h4>
                 <div class="btn-group">
-                    <a href="export_pdf.php?buscar=<?php echo urlencode($busqueda); ?>" class="btn btn-outline-danger btn-sm rounded-0"><i class="bi bi-file-pdf"></i> PDF</a>
+                    <button onclick="generarPDF()" class="btn btn-outline-danger btn-sm rounded-0"><i class="bi bi-file-pdf"></i> PDF</button>
                     <a href="create.php" class="btn btn-primary btn-sm rounded-0"><i class="bi bi-person-plus"></i> Ingreso</a>
                 </div>
             </div>
@@ -96,5 +95,16 @@ $stmt = (new Visita((new Database())->getConnection()))->obtenerTodas($busqueda)
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+    function generarPDF() {
+        var element = document.querySelector('.table-responsive');
+        html2pdf().set({
+          margin: 0.5,
+          filename: 'Reporte_Visitas.pdf',
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+        }).from(element).save();
+    }
+    </script>
 </body>
 </html>

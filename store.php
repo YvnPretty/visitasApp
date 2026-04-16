@@ -3,7 +3,6 @@
 // Recibe los datos por POST y gestiona el flujo del modelo
 session_start();
 include_once 'db.php';
-include_once 'Visita.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $visita = new Visita((new Database())->getConnection());

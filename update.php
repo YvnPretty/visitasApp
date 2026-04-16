@@ -3,7 +3,6 @@
 // Utilizado primariamente para registrar la salida del visitante
 session_start();
 include_once 'db.php';
-include_once 'Visita.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['id'])) {
     $visita = new Visita((new Database())->getConnection());

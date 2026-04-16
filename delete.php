@@ -1,7 +1,6 @@
 <?php
 session_start();
 include_once 'db.php';
-include_once 'Visita.php';
 
 if (isset($_GET['id'])) {
     $database = new Database();
