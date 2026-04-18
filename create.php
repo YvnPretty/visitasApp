@@ -1,43 +1,37 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Ingreso Institucional</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <style>body{background:#f4f6f9;font-family:'Segoe UI',sans-serif;}.form-control, .btn, .card{border-radius:0;}</style>
-</head>
-<body>
-    <div class="container mt-5" style="max-width:600px;">
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-dark text-white text-uppercase" style="border-radius:0;"><i class="bi bi-person-fill-add"></i> Registrar Nuevo Ingreso</div>
-            <div class="card-body p-4 bg-white">
-                <form action="store.php" method="POST">
-                    <div class="mb-3">
-                        <label class="form-label small text-uppercase text-secondary fw-bold">Nombre del Visitante</label>
-                        <input type="text" class="form-control form-control-sm" name="nombre_completo" required>
+<?php
+session_start();
+include 'includes/header.php';
+?>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2 class="fw-bold mb-4 text-center">Registrar Ingreso</h2>
+        <div class="card shadow-sm border-0 p-4">
+            <form action="store.php" method="POST">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold text-secondary">DATOS DEL VISITANTE</label>
+                    <input type="text" name="nombre_completo" class="form-control mb-2" placeholder="Nombre completo" required autofocus>
+                    <input type="text" name="persona_visitada" class="form-control" placeholder="Persona o Depto a visitar" required>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <label class="form-label small fw-bold text-secondary">FECHA</label>
+                        <input type="date" name="fecha" class="form-control" value="<?= date('Y-m-d') ?>" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label small text-uppercase text-secondary fw-bold">Autorizado o Solicitado Por</label>
-                        <input type="text" class="form-control form-control-sm" name="persona_visitada" required>
+                    <div class="col-6">
+                        <label class="form-label small fw-bold text-secondary">HORA ENTRADA</label>
+                        <input type="time" name="hora_entrada" class="form-control" value="<?= date('H:i') ?>" required>
                     </div>
-                    <div class="row mb-4">
-                        <div class="col-6">
-                            <label class="form-label small text-uppercase text-secondary fw-bold">Fecha Reg.</label>
-                            <input type="date" class="form-control form-control-sm bg-light" name="fecha" value="<?= date('Y-m-d') ?>" readonly>
-                        </div>
-                        <div class="col-6">
-                            <label class="form-label small text-uppercase text-secondary fw-bold">Hora Entrada</label>
-                            <input type="time" class="form-control form-control-sm bg-light" name="hora_entrada" value="<?= date('H:i') ?>" readonly>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <a href="index.php" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Cancelar</a>
-                        <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-save2"></i> Confirmar Acceso</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg shadow-sm">Confirmar Acceso</button>
+                    <a href="index.php" class="btn btn-link text-secondary">Volver al listado</a>
+                </div>
+            </form>
         </div>
     </div>
-</body>
-</html>
+</div>
+
+<?php include 'includes/footer.php'; ?>
