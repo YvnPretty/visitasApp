@@ -1,23 +1,23 @@
 <?php
 session_start();
-include_once 'db.php';
+require_once 'config/Database.php';
+require_once 'models/Visita.php';
 
-if (isset($_GET['id'])) {
-    $database = new Database();
+$id = $_GET['id'] ?? null;
+if ($id) {
+    $database = Database::getInstance();
     $db = $database->getConnection();
-    
     $visita = new Visita($db);
-    $visita->id = $_GET['id'];
-    
-    if ($visita->eliminar()) {
-        $_SESSION['mensaje'] = "Registro de visita eliminado.";
-        $_SESSION['tipo_mensaje'] = "warning";
+
+    // Corregido: Pasar el ID directamente al método eliminar
+    if ($visita->eliminar($id)) {
+        $_SESSION['mensaje'] = "Registro eliminado con éxito";
+        $_SESSION['tipo_mensaje'] = "success";
     } else {
-        $_SESSION['mensaje'] = "Error al eliminar el registro.";
+        $_SESSION['mensaje'] = "Error al intentar eliminar";
         $_SESSION['tipo_mensaje'] = "danger";
     }
 }
-
 header("Location: index.php");
 exit();
 ?>

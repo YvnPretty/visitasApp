@@ -1,27 +1,28 @@
 <?php
-// Controlador de Actualización (UPDATE)
-// Utilizado primariamente para registrar la salida del visitante
 session_start();
-include_once 'db.php';
+require_once 'config/Database.php';
+require_once 'models/Visita.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['id'])) {
-    $visita = new Visita((new Database())->getConnection());
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $database = Database::getInstance();
+    $db = $database->getConnection();
+    $visita = new Visita($db);
+
     $visita->id = $_POST['id'];
-    
-    // Comprobación segura usando ciclos foreach
-    foreach(['nombre_completo', 'persona_visitada', 'fecha', 'hora_entrada'] as $f) {
-        if(empty(trim($_POST[$f]))) die(header("Location: index.php?error=FaltanDatos"));
-        $visita->$f = htmlspecialchars(trim($_POST[$f]));
+    $visita->nombre_completo = $_POST['nombre_completo'];
+    $visita->persona_visitada = $_POST['persona_visitada'];
+    $visita->fecha = $_POST['fecha'];
+    $visita->hora_entrada = $_POST['hora_entrada'];
+    $visita->hora_salida = $_POST['hora_salida'];
+
+    if ($visita->actualizar()) {
+        $_SESSION['mensaje'] = "Salida registrada con éxito";
+        $_SESSION['tipo_mensaje'] = "success";
+    } else {
+        $_SESSION['mensaje'] = "Error al actualizar el registro";
+        $_SESSION['tipo_mensaje'] = "danger";
     }
-    
-    if(!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\.]+$/", $visita->nombre_completo)) die(header("Location: index.php?error=NombreInvalido"));
-    
-    $visita->hora_salida = empty($_POST['hora_salida']) ? NULL : $_POST['hora_salida'];
-    
-    if($visita->actualizar()){
-        $_SESSION['mensaje'] = "Registro actualizado exitosamente.";
-        $_SESSION['tipo_mensaje'] = "info";
-    }
-    header("Location: index.php");
 }
+header("Location: index.php");
+exit();
 ?>

@@ -1,24 +1,27 @@
 <?php
-// Controlador para Registrar Datos (CREATE)
-// Recibe los datos por POST y gestiona el flujo del modelo
 session_start();
-include_once 'db.php';
+require_once 'config/Database.php';
+require_once 'models/Visita.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $visita = new Visita((new Database())->getConnection());
-    
-    // Validación estricta iterativa de campos obligatorios
-    foreach(['nombre_completo', 'persona_visitada', 'fecha', 'hora_entrada'] as $f) {
-        if(empty(trim($_POST[$f]))) die(header("Location: index.php?error=FaltanDatos"));
-        $visita->$f = htmlspecialchars(trim($_POST[$f]));
-    }
-    
-    if(!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\.]+$/", $visita->nombre_completo)) die(header("Location: index.php?error=NombreInvalido"));
-    
-    if($visita->crear()){
-        $_SESSION['mensaje'] = "Registro agregado correctamente.";
+    $database = Database::getInstance();
+    $db = $database->getConnection();
+    $visita = new Visita($db);
+
+    $visita->nombre_completo = $_POST['nombre_completo'];
+    $visita->persona_visitada = $_POST['persona_visitada'];
+    $visita->fecha = $_POST['fecha'];
+    $visita->hora_entrada = $_POST['hora_entrada'];
+    $visita->hora_salida = null;
+
+    if ($visita->crear()) {
+        $_SESSION['mensaje'] = "Visitante registrado correctamente";
         $_SESSION['tipo_mensaje'] = "success";
+    } else {
+        $_SESSION['mensaje'] = "Error al registrar el visitante";
+        $_SESSION['tipo_mensaje'] = "danger";
     }
-    header("Location: index.php");
 }
+header("Location: index.php");
+exit();
 ?>
